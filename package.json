@@ -1,0 +1,30 @@
+{
+  "name": "kp-remote",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Audiopoli/kp-remote.git"
+  },
+  "dependencies": {
+    "baconjs": "0.7.89",
+    "express": "4.14.0",
+    "express-basic-auth": "0.2.3",
+    "lodash": "4.17.4",
+    "preact": "7.1.0",
+    "preact-render-to-string": "3.3.0",
+    "sony-sdcp-com": "0.0.2",
+    "winston": "2.3.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-react-jsx": "6.8.0",
+    "babel-register": "6.18.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
