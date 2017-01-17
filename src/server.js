@@ -22,19 +22,22 @@ if (!_.isEmpty(settings.user) && !_.isEmpty(settings.password)) {
 
 const sdcpClient = SdcpClient({address: settings.projector.address, port: settings.projector.port})
 
-const pageData = Bacon.interval(settings.refreshInterval, true)
-  .merge(Bacon.later(100, true))
-  .flatMap(() => {
-    logger.info('Fetching projector data')
-    return Bacon.combineTemplate({
-      time: Date.now(),
-      projector: {
-        status: Bacon.fromPromise(sdcpClient.getPower()),
-        aspectRatio: Bacon.fromPromise(sdcpClient.getAspectRatio())
-      }
+const refresh = Bacon.interval(settings.refreshInterval, true).merge(Bacon.later(100, true))
+
+const projectorData = refresh.flatMap(() => {
+  logger.info('Fetching projector data')
+  return Bacon.fromPromise(sdcpClient.getPower())
+    .flatMap(status => {
+      return Bacon.combineTemplate({
+        time: Date.now(),
+        status,
+        aspectRatio: _.includes(['OFF', 'COOLING'], status) ? undefined : Bacon.fromPromise(sdcpClient.getAspectRatio())
+      })
     })
-  })
-  .toProperty({loading: true})
+})
+
+const pageData = Bacon.combineTemplate({ projectorData })
+  .startWith({loading: true})
 
 pageData.onError(e => {
   logger.info('Error fetching projector data: ', e)
