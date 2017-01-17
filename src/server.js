@@ -36,7 +36,7 @@ const projectorData = refresh.flatMap(() => {
     })
 })
 
-const pageData = Bacon.combineTemplate({ projectorData })
+const pageData = Bacon.combineTemplate({ projector: projectorData })
   .startWith({loading: true})
 
 pageData.onError(e => {

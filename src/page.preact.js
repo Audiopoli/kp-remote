@@ -10,6 +10,7 @@ function render(data) {
       <body>
         <div>
           <h1>Tykki</h1>
+          <p>Päivitetty: {new Date(data.projector.time)}</p>
           <p>Tila: {data.projector.status}</p>
           <p>Kuvasuhde: {data.projector.aspectRatio}</p>
 
