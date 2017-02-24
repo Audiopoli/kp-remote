@@ -25,13 +25,12 @@ const sdcpClient = SdcpClient({address: settings.projector.address, port: settin
 const refresh = Bacon.interval(settings.refreshInterval, true).merge(Bacon.later(100, true))
 
 const projectorData = refresh.flatMap(() => {
-  logger.info('Fetching projector data')
   return Bacon.fromPromise(sdcpClient.getPower())
     .flatMap(status => {
       return Bacon.combineTemplate({
         time: Date.now(),
         status,
-        aspectRatio: _.includes(['OFF', 'COOLING'], status) ? undefined : Bacon.fromPromise(sdcpClient.getAspectRatio())
+        aspectRatio: _.includes(['OFF', 'COOLING'], status) ? undefined : Bacon.fromPromise(sdcpClient.getAspectRatio()).take(1)
       })
     })
 })
